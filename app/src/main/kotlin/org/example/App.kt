@@ -1,3 +1,4 @@
+
 package org.example
 
 fun main() {
@@ -9,6 +10,11 @@ fun main() {
     )
 
     matrixOutput(matrix)
+    replaceDiagonalWithPositiveColumnSums(matrix)
+    matrixOutput(matrix)
+}
+
+fun replaceDiagonalWithPositiveColumnSums(matrix: List<MutableList<Int>>) {
 
     val matrixSize = matrix.size
     for (columnIndex in 0 until matrixSize) {
@@ -28,9 +34,6 @@ fun main() {
         }
 
     }
-
-    matrixOutput(matrix)
-
 }
 
 fun matrixOutput(matrix: List<List<Int>>) {
