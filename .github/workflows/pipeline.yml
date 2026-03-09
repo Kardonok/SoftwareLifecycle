@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Run tests
+        run: ./gradlew test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build project
+        run: ./gradlew build
+
+  package:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+    
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Create Deb package
+        run: ./gradlew jpackage
+
+      - name: Upload Deb package
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb-package
+          path: app/build/DebPackages/*.deb
