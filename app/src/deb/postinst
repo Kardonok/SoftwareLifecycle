@@ -1,0 +1,2 @@
+#!/bin/sh
+ln -sf /opt/softwarelifecycle/bin/softwarelifecycle /usr/bin/softwarelifecycle
