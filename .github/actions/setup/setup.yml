@@ -1,0 +1,22 @@
+name: Setup environment
+description: Setup shared environment
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: oracle
+        java-version: '17'
+        cache: gradle
+
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+      shell: bash
+
+    - name: Install system dependencies for jpackage
+      run: sudo apt-get update && sudo apt-get install -y dpkg fakeroot binutils
+      shell: bash
