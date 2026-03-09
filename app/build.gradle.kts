@@ -11,6 +11,9 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    
+    id("com.gradleup.shadow") version "9.3.2"
+    id("org.beryx.runtime") version "2.0.1"
 }
 
 repositories {
@@ -41,9 +44,44 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "org.example.AppKt"
+    applicationName = "softwarelifecycle"
 }
 
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+runtime {
+	options = listOf(
+		"--strip-debug",
+		"--compress",
+		"2",
+		"--no-header-files",
+		"--no-man-pages"
+	)
+	
+	launcher {
+		jvmArgs = listOf("-Xmx512m")
+		runInBinDir = true
+	}
+	
+	jpackage {
+		installerType = "deb"
+		installerName = "softwarelifecycle"
+		imageName = "softwarelifecycle"
+        appVersion = project.version.toString()
+
+        installerOptions = listOf(
+            "--vendor", "Kardonok",
+            "--description", "Software Lifecycle codelab",
+            "--linux-package-name", "softwarelifecycle",
+            "--linux-deb-maintainer", "openmailforeveryone@gmail.com",
+        )
+        
+        jvmArgs = listOf("-Xmx512m")
+        outputDir = "DebPackages"
+        resourceDir = file("src/deb")
+	}
+}
+
